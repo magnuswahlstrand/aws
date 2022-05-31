@@ -19,20 +19,8 @@ export class CognitoStack extends Stack {
             userPool: userPool
         })
 
-        const identityPool = new cognito.CfnIdentityPool(this, 'identityPool', {
-            identityPoolName: 'myIdentityPool',
-            allowUnauthenticatedIdentities: false,
-            cognitoIdentityProviders: [
-                {
-                    clientId: userPoolClient.userPoolClientId,
-                    providerName: userPool.userPoolProviderName,
-                },
-            ],
-        });
 
         new CfnOutput(this, 'userPoolId', {value: userPool.userPoolId})
         new CfnOutput(this, 'userPoolClientId', {value: userPoolClient.userPoolClientId})
-        new CfnOutput(this, 'identityPoolId', {value: identityPool.ref})
-        // new CfnOutput(this, 'userPoolId', {value: userPool.userPoolId})
     }
 }
