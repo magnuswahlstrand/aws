@@ -44,3 +44,7 @@ Welcome to my repo focus on all things AWS.
     * [Serverless Identity Round](https://identity-round-robin.awssecworkshops.com/serverless/)
 * Security
     * [AWS: 2021 AWS security-focused workshops](https://aws.amazon.com/blogs/security/2021-aws-security-focused-workshops/)
+* Accounts and IAM
+  * Landing Zone Accelerator
+    * https://aws.amazon.com/solutions/implementations/landing-zone-accelerator-on-aws/
+    * https://github.com/awslabs/landing-zone-accelerator-on-aws
