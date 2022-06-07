@@ -1,0 +1,39 @@
+### Authorization by token, part 1. Retrieve and save token.
+POST https://cognito-idp.eu-west-1.amazonaws.com/
+Content-Type: application/x-amz-json-1.1
+X-Amz-Target: AWSCognitoIdentityProviderService.InitiateAuth
+
+{
+  "AuthParameters" : {
+    "USERNAME" : "magnus.wahlstrand@gmail.com",
+    "PASSWORD" : "Password123#"
+  },
+  "AuthFlow" : "USER_PASSWORD_AUTH",
+  "ClientId" : "aps65lj547r35jalo8gpg65iv"
+}
+
+> {%
+client.global.set("auth_token", response.body.json.AuthenticationResult.AccessToken);
+%}
+
+### Authorization by token, part 2. Use token to authorize.
+GET https://49cv9rbps9.execute-api.eu-west-1.amazonaws.com/books
+#Authorization: Bearer {{auth_token}}
+Authorization: Bearer eyJraWQiOiIxOFE5TnU1NEU0R01tdHkxdm5IbWNSVHFEWTlOeXdCaDVxZzRhM3JpVDlrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxZTMxMzllZC0wYzE0LTQ3MGEtYThmOC1iYTRkNzlkODkxOWUiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuZXUtd2VzdC0xLmFtYXpvbmF3cy5jb21cL2V1LXdlc3QtMV9MaUVhWVZ1N1kiLCJjbGllbnRfaWQiOiJhcHM2NWxqNTQ3cjM1amFsbzhncGc2NWl2Iiwib3JpZ2luX2p0aSI6IjdmZTdlMDU0LWMzNTctNDI3Mi1iYmUxLTNiZjdjYjFjMDM0NSIsImV2ZW50X2lkIjoiNjE2YmQ5Y2YtN2I1MS00N2IxLTlmNGUtYmE1NjA5ODNjNTNhIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTY1NDQxNDMxMiwiZXhwIjoxNjU0NDE3OTEyLCJpYXQiOjE2NTQ0MTQzMTIsImp0aSI6IjA0ZTZhMzQzLWYzMjctNGVmYy1hYzA4LTVmYWY2OWM5YzVhMSIsInVzZXJuYW1lIjoiMWUzMTM5ZWQtMGMxNC00NzBhLWE4ZjgtYmE0ZDc5ZDg5MTllIn0.GeoSuJgyPa8OgTYf4A_HKSkBqtofxcXpU8w_6wbQ8RpVZTD6HJvq5QGt3THx9m4qpRbDpX_Wa5kXL-T-zkEd7bunSo09m4GjfR6mgJA06Ey30MetijpbRFsNOt179D_4WnZ6GLPTLQLtW_RTl2uF5EsE81PMx9Kmn8frj_CjdsJmoBOnHWFE42jEZU3Qg-fghsHfLIXsSjdvMJx68dINnzABlFTMERHA8hanVduhLWlldfQWYvZsZkytmSDr8xShF6PrdaJD9cMDWmbG6EQ7wbOv1VTXTUOUTLdTQW2riLhKDKZU2we4yUL5HSd2xggSZg4tCuFf5mCQ71aXl-8EbQ
+
+####
+POST https://hej.auth.eu-west-1.amazoncognito.com/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+#Authorization: Basic aSdxd892iujendek328uedj
+
+grant_type=client_credentials&scope=users/magnus-api&client_id=7v8l4snu7nldmjdqp9bpg4qp34&client_secret=1mm4qpjg9636d08667d68840hlic0geeqc657a22vsq8peglheq3
+
+
+> {%
+client.global.set("auth_token", response.body.access_token);
+client.log(response.body)
+%}
+
+### Authorization by token, part 2. Use token to authorize.
+GET https://vca9mv8ub4.execute-api.eu-west-1.amazonaws.com/books
+Authorization: Bearer {{auth_token}}
