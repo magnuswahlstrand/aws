@@ -1,0 +1,8 @@
+### Send POST request with json body
+POST https://ksa5cv7jbd.execute-api.us-east-1.amazonaws.com/order
+Content-Type: application/json
+
+{
+  "amount": 9.99,
+  "line_items": ["food", "shelter"]
+}
