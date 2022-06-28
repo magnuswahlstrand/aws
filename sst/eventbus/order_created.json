@@ -1,0 +1,8 @@
+[
+  {
+    "Source": "terminal",
+    "Detail": "{ \"amount\": 999, \"line_items\": [] }",
+    "EventBusName": "magnus-eventbus-EventBus",
+    "DetailType": "order.created"
+  }
+]

@@ -26,7 +26,7 @@ package main
 //	Detail     T         `json:"detail"`
 //}
 //
-//func Handler(request events.SQSEvent) (events.APIGatewayProxyResponse, error) {
+//func LogHandler(request events.SQSEvent) (events.APIGatewayProxyResponse, error) {
 //	//fmt.Printf("received event %#v\n", request)
 //
 //	for _, record := range request.Records {
@@ -51,5 +51,5 @@ package main
 //}
 //
 //func main() {
-//	lambda.Start(Handler)
+//	lambda.Start(LogHandler)
 //}

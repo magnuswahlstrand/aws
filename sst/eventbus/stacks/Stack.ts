@@ -1,7 +1,7 @@
-import {Api, EventBus, Function, StackContext} from "@serverless-stack/resources";
+import {EventBus, Api, StackContext} from "@serverless-stack/resources";
 
 export function Stack({stack}: StackContext) {
-    const bus = new EventBus(stack, "OrderEventBus", {})
+    const bus = new EventBus(stack, "EventBus", {})
 
     bus.addRules(stack, {
         "order_created": {
@@ -29,10 +29,8 @@ export function Stack({stack}: StackContext) {
         },
     });
 
-
     stack.addOutputs({
         ApiEndpoint: api.url,
-        BusARN: bus.eventBusArn,
         BusName: bus.eventBusName
     });
 }
