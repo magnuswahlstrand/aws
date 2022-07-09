@@ -39,7 +39,7 @@ func CreateOrderHandler(request events.APIGatewayProxyRequest) error {
 		return err
 	}
 
-	// 4. Publish events
+	// 4. Publish events to EventBridge
 	_, err = client.PutEvents(context.Background(),
 		&cloudwatchevents.PutEventsInput{
 			Entries: []types.PutEventsRequestEntry{
