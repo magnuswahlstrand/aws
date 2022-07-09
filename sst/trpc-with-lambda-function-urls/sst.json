@@ -1,0 +1,5 @@
+{
+  "name": "trpc-with-lambda-function-urls",
+  "region": "us-east-1",
+  "main": "stacks/index.ts"
+}
