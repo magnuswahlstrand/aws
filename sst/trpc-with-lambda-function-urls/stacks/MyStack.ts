@@ -1,12 +1,12 @@
-import { StackContext, Api } from "@serverless-stack/resources";
+import {Function, StackContext, Table} from "@serverless-stack/resources";
 
-export function MyStack({ stack }: StackContext) {
-  const api = new Api(stack, "api", {
-    routes: {
-      "GET /": "functions/lambda.handler",
-    },
-  });
-  stack.addOutputs({
-    ApiEndpoint: api.url
-  });
+export function MyStack({stack}: StackContext) {
+    const fn = new Function(stack, "trpc", {
+        handler: "functions/lambda.handler",
+        url: true
+    })
+
+    stack.addOutputs({
+        FunctionURL: fn.url ?? ""
+    });
 }
