@@ -1,14 +1,30 @@
 import * as trpc from '@trpc/server';
 import * as z from "zod"
+import KSUID from 'ksuid';
 import {awsLambdaRequestHandler} from '@trpc/server/adapters/aws-lambda';
+import {completeToDo, createToDo, listToDos} from "./db";
 
 const appRouter = trpc.router()
-    .query('sayHello', {     // 1. Procedure name
-        input: z.string(),                  // 2. Input
+    .mutation('createToDo', {
+        input: z.string(),
         async resolve(req) {
-            return `Hello, ${req.input}!`;  // 3. Response
+            const id = KSUID.randomSync().string
+            await createToDo(id, req.input)
+            return id
+        }
+    })
+    .mutation('completeToDo', {
+        input: z.string(),
+        async resolve(req) {
+            return completeToDo(req.input)
+        }
+    })
+    .query('listToDos', {
+        async resolve(_) {
+            return listToDos()
         },
-    });
+    })
+;
 
 export type AppRouter = typeof appRouter;
 
