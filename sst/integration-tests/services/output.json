@@ -1,0 +1,8 @@
+{
+  "magnus-integration-tests-MyStack": {
+    "EventBusName": "magnus-integration-tests-EventBus",
+    "TestEventTable": "magnus-integration-tests-IntegrationTestEvents",
+    "FulfillOrderEndpoint": "https://6cktfc4d72bgim55iodjnr6jea0ssddr.lambda-url.us-east-1.on.aws/",
+    "CreateOrderEndpoint": "https://bwetjihoer2oi4wlymn672l4oe0lanpp.lambda-url.us-east-1.on.aws/"
+  }
+}

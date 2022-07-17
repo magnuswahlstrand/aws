@@ -4,6 +4,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	events "github.com/aws/aws-cdk-go/awscdk/v2/awsevents"
 	targets "github.com/aws/aws-cdk-go/awscdk/v2/awseventstargets"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsiot"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	sfn "github.com/aws/aws-cdk-go/awscdk/v2/awsstepfunctions"
 	tasks "github.com/aws/aws-cdk-go/awscdk/v2/awsstepfunctionstasks"
@@ -72,6 +73,26 @@ func NewHelloWorldStack(scope constructs.Construct, id string, props *HelloWorld
 		Schedule: events.Schedule_Rate(awscdk.Duration_Minutes(jsii.Number(30.0))),
 	})
 	rule.AddTarget(targets.NewSfnStateMachine(machine, nil))
+
+	thing := awsiot.NewCfnThing(stack, s("MyThing"), &awsiot.CfnThingProps{
+		AttributePayload: nil,
+		ThingName:        s("MagnusCDKThing"),
+	})
+
+	awsiot.NewCfnPolicy(stack, s("MyThingPolicy"), &awsiot.CfnPolicyProps{
+		PolicyDocument: nil,
+		PolicyName:     nil,
+	})
+
+	cert := awsiot.NewCfnCertificate(stack, s("MyThingCert"), &awsiot.CfnCertificateProps{
+		Status:                    nil,
+		CaCertificatePem:          nil,
+		CertificateMode:           nil,
+		CertificatePem:            nil,
+		CertificateSigningRequest: nil,
+	})
+
+	thing.AddMetadata()
 
 	return stack
 }

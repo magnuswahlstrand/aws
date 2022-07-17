@@ -10,13 +10,22 @@ Welcome to my repo focus on all things AWS.
 
 # Topics
 
-### Cognito with React
+## Cognito with React
 
 **Goal:** Create a small react app where a user can register and log in using Cognito.
 
 ##### Resources
-
 * [Boddy Hadz: AWS CDK Cognito Identity Pools](https://bobbyhadz.com/blog/aws-cdk-cognito-identity-pool-example)
+
+
+## Cognito authorization with API Gateway
+
+**Goal:** Create a small react app where a user can register and log in using Cognito.
+
+
+##### Resources
+* [Setting up a machine-to-machine authentication system with Amazon Cognito](https://medium.com/proud2becloud/setting-up-a-machine-to-machine-authentication-system-with-amazon-cognito-ec403127ca9e)
+
 
 ## Potential topics
 
@@ -46,5 +55,7 @@ Welcome to my repo focus on all things AWS.
     * [AWS: 2021 AWS security-focused workshops](https://aws.amazon.com/blogs/security/2021-aws-security-focused-workshops/)
 * Accounts and IAM
   * Landing Zone Accelerator
-    * https://aws.amazon.com/solutions/implementations/landing-zone-accelerator-on-aws/
-    * https://github.com/awslabs/landing-zone-accelerator-on-aws
+    * [AWS](https://aws.amazon.com/solutions/implementations/landing-zone-accelerator-on-aws/)
+    * [Github](https://github.com/awslabs/landing-zone-accelerator-on-aws)
+# Serverless
+  * [SLIC Starter pack](https://github.com/fourTheorem/slic-starter)
