@@ -1,5 +1,12 @@
-import {Entity} from "electrodb";
-import CommentSchema from "./models/comments"
-import * as Dynamo from "./dynamo"
+import {Entity} from "electrodb"
+import {schema} from "./comments"
+import * as cdk from "./cdk-output.json"
 
-export const commentEntity = new Entity(CommentSchema, Dynamo.Configuration)
+import {DynamoDBClient} from "@aws-sdk/client-dynamodb";
+
+const client = new DynamoDBClient({})
+
+export const comments = new Entity(schema, {
+    table: cdk.ElectroDbWs1Stack.ElectroDbTableName,
+    client: client,
+})

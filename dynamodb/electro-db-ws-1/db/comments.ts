@@ -1,39 +1,44 @@
 import {v4 as uuid} from "uuid";
 
-const schema = {
+export const schema = {
     model: {
         entity: "comments",
         version: "1",
-        service: "commentservice"
+        service: "comments",
     },
     attributes: {
         commentID: {
             type: "string",
-            default: () => uuid(),
-            readOnly: true,
             required: true,
+            readOnly: true,
+            default: () => uuid()
         },
-        text: {
+        comment: {
             type: "string",
             required: true,
         },
         createdAt: {
             type: "string",
-            required: true,
+            readOnly: true,
+            set: () => new Date().toISOString()
+        },
+        updatedAt: {
+            type: "string",
+            readOnly: true,
+            watch: "*",
+            set: () => new Date().toISOString()
         }
     },
     indexes: {
-        comment: {
+        comments: {
             pk: {
                 field: "pk",
                 composite: ["commentID"],
             },
             sk: {
                 field: "sk",
-                composite: ["createdAt"],
+                composite: [],
             }
         }
     }
-} as const;
-
-export default schema;
+} as const

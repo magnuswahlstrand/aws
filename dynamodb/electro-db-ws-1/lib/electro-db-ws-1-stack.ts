@@ -9,18 +9,18 @@ export class ElectroDbWs1Stack extends Stack {
         // The code that defines your stack goes here
 
         // example resource
-        const table = new dynamodb.Table(this, 'Table', {
+        const table = new dynamodb.Table(this, 'ElectroDbTable', {
             partitionKey: {
-                type: dynamodb.AttributeType.STRING,
                 name: 'pk',
+                type: dynamodb.AttributeType.STRING,
             },
             sortKey: {
-                type: dynamodb.AttributeType.STRING,
                 name: 'sk',
+                type: dynamodb.AttributeType.STRING,
             }
-        });
+        })
 
-        new CfnOutput(this, 'TableName', {
+        new CfnOutput(this, 'ElectroDbTableName', {
             value: table.tableName,
         })
     }
