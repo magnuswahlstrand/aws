@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	"github.com/google/uuid"
 )
 
 type DBClient struct {
@@ -14,16 +14,12 @@ type DBClient struct {
 	tableName string
 }
 
-func init() {
-
-}
-
 func New(tableName string) *DBClient {
 	cfg, err := config.LoadDefaultConfig(context.TODO(), func(o *config.LoadOptions) error {
 		o.Region = "us-east-1"
 		return nil
 	})
-	config.
+
 	if err != nil {
 		panic(err)
 	}
@@ -32,25 +28,20 @@ func New(tableName string) *DBClient {
 	return &DBClient{svc, tableName}
 }
 
-func (c *DBClient) PutItem(ctx context.Context, item map[string]interface{}) (*dynamodb.PutItemOutput, error) {
+func (c *DBClient) PutItem(ctx context.Context, r Record) error {
+	r.PK = r.ID
+	r.SK = r.ID
+	av, err := attributevalue.MarshalMap(r)
+	if err != nil {
+		return fmt.Errorf("failed to marshal Record, %w", err)
+	}
 
-	out, err := svc.PutItem(ctx, &dynamodb.PutItemInput{
+	_, err = svc.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(c.tableName),
-		Item: map[string]types.AttributeValue{
-			"PK": &types.AttributeValueMemberS{Value: uuid.New().String()},
-			"SK": &types.AttributeValueMemberS{Value: uuid.New().String()},
-		},
+		Item:      av,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return out, nil
-}
-
-type Order struct {
-	ID string
-}
-
-func (c *DBClient) CreateOrder() {
-
+	return nil
 }
