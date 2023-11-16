@@ -12,11 +12,15 @@
     "test": "sst load-config -- vitest run"
   },
   "devDependencies": {
-    "aws-cdk-lib": "2.39.1",
     "@serverless-stack/cli": "^1.15.16",
     "@serverless-stack/resources": "^1.15.16",
-    "typescript": "^4.8.4",
     "@tsconfig/node16": "^1.0.3",
+    "@types/aws-lambda": "^8.10.108",
+    "aws-cdk-lib": "2.39.1",
+    "typescript": "^4.8.4",
     "vitest": "^0.24.3"
+  },
+  "dependencies": {
+    "aws-lambda": "^1.0.7"
   }
 }

@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -8,6 +8,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
+
+type Record struct {
+	PK           string
+	SK           string
+	ID           string
+	URLs         []string `dynamodbav:",stringset"`
+	IgnoredField string   `dynamodbav:"-"`
+	RenamedField string   `dynamodbav:"renamed" json:"myName"`
+}
 
 type DBClient struct {
 	*dynamodb.Client
@@ -24,8 +33,7 @@ func New(tableName string) *DBClient {
 		panic(err)
 	}
 
-	svc = dynamodb.NewFromConfig(cfg)
-	return &DBClient{svc, tableName}
+	return &DBClient{dynamodb.NewFromConfig(cfg), tableName}
 }
 
 func (c *DBClient) PutItem(ctx context.Context, r Record) error {
@@ -36,12 +44,28 @@ func (c *DBClient) PutItem(ctx context.Context, r Record) error {
 		return fmt.Errorf("failed to marshal Record, %w", err)
 	}
 
-	_, err = svc.PutItem(ctx, &dynamodb.PutItemInput{
+	_, err = c.Client.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String(c.tableName),
 		Item:      av,
 	})
+	return err
+}
+
+func (c *DBClient) GetItems(ctx context.Context) ([]Record, error) {
+	var records []Record
+	results, err := c.Client.Scan(
+		ctx,
+		&dynamodb.ScanInput{
+			TableName: aws.String(c.tableName),
+		},
+	)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	if err := attributevalue.UnmarshalListOfMaps(results.Items, &records); err != nil {
+		return nil, err
+	}
+
+	return records, nil
 }

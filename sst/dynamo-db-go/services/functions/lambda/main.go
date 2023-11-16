@@ -2,29 +2,41 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/google/uuid"
+	"main/functions/lambda/db"
 	"os"
 )
 
-var svc *dynamodb.Client
-
-var dbClient DBClient
-
 func Handler(request events.APIGatewayV2HTTPRequest) (string, error) {
-	db := New(os.Getenv("TABLE_NAME"))
+	dbClient := db.New(os.Getenv("TABLE_NAME"))
 
-	_, err := db.PutItem(context.TODO(), map[string]interface{}{
-		"PK": uuid.New().String(),
-		"SK": uuid.New().String(),
-	})
+	r := db.Record{
+		ID: uuid.New().String(),
+		URLs: []string{
+			"https://example.com/first/link",
+			"https://example.com/second/url",
+		},
+		IgnoredField: "this will be ignored",
+		RenamedField: "this will be renamed",
+	}
+	if err := dbClient.PutItem(context.TODO(), r); err != nil {
+		return "", err
+	}
+
+	items, err := dbClient.GetItems(context.TODO())
 	if err != nil {
 		return "", err
 	}
 
-	return "success", nil
+	b, err := json.MarshalIndent(items, "", "  ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
 }
 
 func main() {

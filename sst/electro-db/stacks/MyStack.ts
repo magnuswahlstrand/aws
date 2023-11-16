@@ -1,4 +1,4 @@
-import {StackContext, Table} from "@serverless-stack/resources";
+import {StackContext, Table, StaticSite} from "@serverless-stack/resources";
 
 export function MyStack({stack}: StackContext) {
     const table = new Table(stack, "table", {

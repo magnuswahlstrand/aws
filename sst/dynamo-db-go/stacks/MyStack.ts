@@ -1,28 +1,31 @@
-import {Function, StackContext, Table} from "@serverless-stack/resources";
+import { StackContext, Api } from "@serverless-stack/resources";
 
-export function MyStack({stack}: StackContext) {
-    const orderTable = new Table(stack, 'OrderTable', {
-        fields: {
-            PK: "string",
-            SK: "string",
+export function MyStack({ stack, app }: StackContext) {
+    // Create Api
+    const api = new Api(stack, "Api", {
+        // authorizers: {
+        //     auth0: {
+        //         type: "jwt",
+        //         jwt: {
+        //             issuer: process.env.AUTH0_DOMAIN + "/",
+        //             audience: [process.env.AUTH0_DOMAIN + "/api/v2/"],
+        //         },
+        //     },
+        // },
+        // defaults: {
+        //     authorizer: "auth0",
+        // },
+        routes: {
+            // "GET /private": "functions/private.main",
+            "GET /public": {
+                function: "functions/public.handler",
+                authorizer: "none",
+            },
         },
-        primaryIndex: {
-            partitionKey: "PK",
-            sortKey: "SK"
-        },
-    })
+    });
 
-
-    const fn = new Function(stack, "TableFn", {
-        handler: "functions/lambda/main.go",
-        environment: {
-            TABLE_NAME: orderTable.tableName,
-        },
-        permissions: [orderTable],
-        url: true
-    })
-
+    // Show the API endpoint and other info in the output
     stack.addOutputs({
-        apiEndpoint: fn.url ?? ""
+        ApiEndpoint: api.url,
     });
 }

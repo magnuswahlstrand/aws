@@ -1,0 +1,5 @@
+{
+  "name": "transactional-outbox-dynamodb",
+  "region": "us-east-1",
+  "main": "stacks/index.ts"
+}

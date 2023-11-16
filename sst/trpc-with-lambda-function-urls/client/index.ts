@@ -29,10 +29,6 @@ const client = createTRPCClient<AppRouter>({
 // })()
 
 
-
-@SS
-
-
 const promptNewTodo = async () => {
     const entered = await prompts({
         type: 'text',
