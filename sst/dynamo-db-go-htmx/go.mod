@@ -10,6 +10,7 @@ require (
 	github.com/aws/jsii-runtime-go v1.92.0
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.0
 	github.com/gofiber/fiber/v2 v2.51.0
+	github.com/gofiber/template/html/v2 v2.0.5
 	github.com/guregu/dynamo v1.21.0
 	github.com/lithammer/fuzzysearch v1.1.8
 	github.com/stretchr/testify v1.8.4
@@ -25,6 +26,8 @@ require (
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.16.0 // indirect
+	github.com/gofiber/template v1.8.2 // indirect
+	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect

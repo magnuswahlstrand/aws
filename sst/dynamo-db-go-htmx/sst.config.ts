@@ -25,6 +25,16 @@ export default {
                 primaryIndex: {partitionKey: "UserID"},
             });
 
+            const exerciseLogTable = new Table(stack, "ExerciseTable2", {
+                fields: {
+                    UserID: "string",
+                    ExerciseDate: "string",
+                    ExerciseName: "string",
+                    Weight: "number",
+                },
+                primaryIndex: {partitionKey: "UserID", sortKey: "ExerciseDate"},
+            });
+
             const site = new StaticSite(stack, "Site", {
                 path: "web",
                 customDomain: {
@@ -34,8 +44,8 @@ export default {
                 indexPage: "index.html",
                 replaceValues: [
                     {
-                        files: "index.html",
-                        search: "https://api-magnus.htmx.link",
+                        files: "*.html",
+                        search: "api-magnus.htmx.link",
                         replace: apiDomain
                     },
                 ],
@@ -52,7 +62,7 @@ export default {
                     }
                 },
                 customDomain: apiDomain,
-                cors:   {
+                cors: {
                     allowMethods: ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"],
                     allowOrigins: ["*"],
                     allowHeaders: ["*"],
@@ -64,6 +74,7 @@ export default {
             stack.addOutputs({
                 ApiEndpoint: api.customDomainUrl || api.url,
                 SiteUrl: site.customDomainUrl || site.url,
+                ExerciseTable: exerciseLogTable.tableName,
             });
         });
     },

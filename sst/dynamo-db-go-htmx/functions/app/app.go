@@ -1,17 +1,21 @@
 package app
 
 import (
+	"embed"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/template/html/v2"
 	"github.com/guregu/dynamo"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 	"golang.org/x/exp/maps"
+	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -76,18 +80,29 @@ func SetupDynamo() dynamo.Table {
 	sess := session.Must(session.NewSession())
 	db := dynamo.New(sess, &aws.Config{Region: aws.String("eu-north-1")})
 	table := db.Table(os.Getenv("TABLE_NAME"))
-	fmt.Println("table", table.Name())
 	return table
 }
 
 var fuzzySearcher *FuzzySearcher
 var updateAt = time.Time{}
 
+//go:embed templates/*
+var templates embed.FS
+
+var count = 0
+var mutex = &sync.Mutex{}
+
 func SetupApp() *fiber.App {
 	table := SetupDynamo()
+	fmt.Println(templates.ReadDir("."))
+	fmt.Println(templates.ReadDir("/"))
+	engine := html.NewFileSystem(http.FS(templates), ".html")
+	engine.Debug(true)
 
 	var app *fiber.App
-	app = fiber.New()
+	app = fiber.New(fiber.Config{
+		Views: engine,
+	})
 	app.Use(logger.New())
 	app.Use(cors.New(
 		cors.Config{
@@ -102,6 +117,17 @@ func SetupApp() *fiber.App {
 	})
 	app.Get("/foo", func(c *fiber.Ctx) error {
 		return c.SendString("Foo")
+	})
+
+	app.Get("/error", func(c *fiber.Ctx) error {
+		success := c.QueryBool("success", false)
+		if !success {
+			mutex.Lock()
+			defer mutex.Unlock()
+			count++
+			return c.Render("templates/error", fiber.Map{"Count": count})
+		}
+		return c.Render("templates/success", fiber.Map{})
 	})
 	searchFallback := "<tr><td colspan=\"3\" class=\"text-center\">No matches</td></tr>"
 	app.Get("/search", func(c *fiber.Ctx) error {
